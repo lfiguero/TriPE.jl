@@ -1,0 +1,13 @@
+name = "TriPE"
+uuid = "db78bf2f-c730-4988-835b-abebeac106ba"
+authors = ["Leonardo Figueroa <leonardo@leonardofigueroa.org> and contributors"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.6.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
