@@ -1,6 +1,7 @@
 module TriPE
 
 import Base: +, -, *, /, ==, isapprox
+import SpecialFunctions: loggamma
 
 export TriParam, TriFun
 
@@ -83,5 +84,11 @@ end
 
 # Position range of coefficients of given degree
 positionRange(deg::Integer) = (polyDim(deg-1)+1):polyDim(deg)
+
+# Weighted inner product
+function h00(κ::TriParam{T}) where T
+	α = κ.α+κ.sα; β = κ.β+κ.sβ; γ = κ.γ+κ.sγ;
+	exp(loggamma(α+1) + loggamma(β+1) + loggamma(γ+1) - loggamma(α+β+γ+3))
+end
 
 end # module

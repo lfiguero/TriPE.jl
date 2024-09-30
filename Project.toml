@@ -3,6 +3,9 @@ uuid = "db78bf2f-c730-4988-835b-abebeac106ba"
 authors = ["Leonardo Figueroa <leonardo@leonardofigueroa.org> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+
 [compat]
 julia = "1.6.7"
 
