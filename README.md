@@ -1,3 +1,3 @@
 # TriPE
 
-[![Build Status](https://github.com/lfiguero/TriPE.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/lfiguero/TriPE.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[**TriPE**](https://en.wiktionary.org/w/index.php?title=tripe&oldid=81353699#Noun): **Tri**angle **P**olynomial **E**xpansions
