@@ -1,0 +1,323 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{mathdots}
+\usepackage{xcolor}
+\usepackage[all,cmtip]{xy}
+\usepackage[colorlinks,allcolors=magenta!50!black]{hyperref}
+
+\makeatletter
+\DeclareFontEncoding{LS2}{}{\noaccents@}
+\makeatother
+
+\DeclareFontSubstitution{LS2}{stix}{m}{n}
+\DeclareSymbolFont{aux}{LS2}{stixtt}{m}{n}
+\DeclareMathSymbol{\rtriangle}{\mathord}{aux}{"99}
+\DeclareMathSymbol{\stixsquare}{\mathord}{aux}{"9A}
+
+\title{Justification of some formulae used in TriPE.jl}
+\author{}
+\date{}
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\begin{document}
+\maketitle
+
+\section{Basis}
+
+Let $\rtriangle$ be the unit triangle $\{ (x,y) \in \mathbb{R}^2 \mid 0 < x, y, x+y < 1 \}$.
+Given parameters $\alpha, \beta, \gamma > -1$, let $w_{\alpha,\beta,\gamma} \colon \rtriangle \to \mathbb{R}$ be the weight function defined by
+%
+\begin{equation*}
+w_{\alpha,\beta,\gamma}(x,y) := x^\alpha y^\beta (1-x-y)^\gamma.
+\end{equation*}
+%
+Let $\Pi^2$ denote the space of all two-variable polynomials and, given $n \in \mathbb{N}_0 = \{0, 1, 2, \dotsc, \}$, let $\Pi^2_n$ denote the space of two-variable polynomials of total degree less than or equal to $n$.
+We adopt the convention $\Pi^2_n = \{ 0 \}$ for $n < 0$.
+We define the $w_{\alpha,\beta,\gamma}$-weighted inner product $\langle \cdot, \cdot \rangle_{\alpha,\beta,\gamma} \colon \Pi^2 \times \Pi^2 \to \mathbb{R}$ by
+%
+\begin{equation*}
+\langle p, q \rangle_{\alpha,\beta,\gamma} := \int_\rtriangle p(x,y) \, q(x,y) \, w_{\alpha,\beta,\gamma}(x,y) \, d(x,y).
+\end{equation*}
+%
+Given $n \in \mathbb{N}_0$, let $\mathcal{V}^{\alpha,\beta,\gamma}_n$ denote the space of orthogonal polynomials with respect to the above $w_{\alpha,\beta,\gamma}$-weighted inner product; that is,
+%
+\begin{equation*}
+\mathcal{V}^{\alpha,\beta,\gamma}_n := \left\{ p \in \Pi^2_n \mid (\forall\,q\in\Pi^2_{n-1})\ \langle p, q \rangle_{\alpha,\beta,\gamma} = 0 \right\}.
+\end{equation*}
+%
+One orthogonal basis of $\mathcal{V}^{\alpha,\beta,\gamma}_n$ is given by $\{ P^{\alpha,\beta,\gamma}_{n,k} \mid 0 \leq k \leq n \}$, where each triangle polynomial $P^{\alpha,\beta,\gamma}_{n,k}$ is expressed in terms of Jacobi polynomials as \cite[\S~2.4]{DunklXu:2014} \cite[\S~4.1]{Xu:2017b}
+%
+\begin{equation}\label{trianglePolynomial}
+P^{\alpha,\beta,\gamma}_{n,k}(x,y) := (x+y)^k P^{(\alpha,\beta)}_k\mathopen{}\left( \frac{y-x}{x+y} \mathclose{}\right) P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(1-2x-2y).
+\end{equation}
+%
+We emphasize that each $P^{\alpha,\beta,\gamma}_{n,k}$ is of total degree $n$.
+
+\section{Jacobi polynomials}
+
+Given $\alpha, \beta > -1$ and $n \in \mathbb{N}_0$, let $P^{(\alpha,\beta)}_n$ denote the Jacobi polynomial of parameter $(\alpha,\beta)$ and degree $n$ \cite[Ch.~IV]{Szego:1975}.
+We adopt the useful convention $P^{(\alpha,\beta)}_n = 0$ for $n < 0$.
+
+The Jacobi polynomials satisfy the orthogonality property
+%
+\begin{equation}\label{JacobiOrthogonality}
+\int_{-1}^1 P^{(\alpha,\beta)}_n(t) P^{(\alpha,\beta)}_m(t) (1-t)^\alpha (1+t)^\beta \, dt = \delta_{n,m} \, h^{(\alpha,\beta)}_n
+\end{equation}
+%
+where the squared norms are \cite[Eq.~(4.3.3)]{Szego:1975}
+%
+\begin{subequations}\label{JacobiSquaredNorms}
+\begin{align}
+\label{JacobiSquaredNormFirst}%
+h^{(\alpha,\beta)}_0 & := 2^{\alpha+\beta+1} \frac{\Gamma(\alpha+1) \Gamma(\beta+1)}{\Gamma(\alpha+\beta+2)},\\
+\label{JacobiSquaredNormGeneral}%
+(\forall\,n\geq 1) \quad h^{(\alpha,\beta)}_n & := \frac{2^{\alpha+\beta+1}}{2n+\alpha+\beta+1} \frac{\Gamma(n+\alpha+1) \Gamma(n+\beta+1)}{\Gamma(n+1) \Gamma(n+\alpha+\beta+1)}.
+\end{align}
+\end{subequations}
+%
+We will also use the three-term recurrence \cite[Eq.~(4.5.1)]{Szego:1975}
+%
+\begin{subequations}\label{JacobiTTR}
+% Checked with Mathematica
+\begin{equation}\label{JacobiTTRFirst}
+t \, P^{(\alpha,\beta)}_0(t) = \frac{\beta-\alpha}{\alpha+\beta+2} \, P^{(\alpha,\beta)}_0(t) + \frac{2}{\alpha+\beta+2} \, P^{(\alpha,\beta)}_1(t),
+\end{equation}
+% Checked with Mathematica
+\begin{multline}\label{JacobiTTRGeneral}
+(\forall\,n\geq 1) \quad t\,P^{(\alpha,\beta)}_n(t)
+= \frac{2(n+\alpha)(n+\beta)}{(2n+\alpha+\beta)(2n+\alpha+\beta+1)} \, P^{(\alpha,\beta)}_{n-1}(t)\\
++ \frac{\beta^2-\alpha^2}{(2n+\alpha+\beta)(2n+\alpha+\beta+2)} \, P^{(\alpha,\beta)}_n(t)\\
++ \frac{2(n+1)(n+\alpha+\beta+1)}{(2n+\alpha+\beta+1)(2n+\alpha+\beta+2)} \, P^{(\alpha,\beta)}_{n+1}(t).
+\end{multline}
+\end{subequations}
+%
+We will also employ the relation \cite[Eq.~(4.5.4)]{Szego:1975}
+%
+\begin{equation}\label{JacobiTimesOneMinusArgShift}
+(1-t) P^{(\alpha+1,\beta)}_n(t) = \frac{2}{2n+\alpha+\beta+2} \left( (n+\alpha+1) P^{(\alpha,\beta)}_n(t) - (n+1) P^{(\alpha,\beta)}_{n+1}(t) \right)
+\end{equation}
+%
+and the relation \cite[Eq.~(6.4.21)]{AAR:1999}
+%
+\begin{equation}\label{JacobiAlphaIdShift}
+(\forall\,n\geq 1) \quad P^{(\alpha+1,\beta)}_n(t) = \frac{n+\alpha+\beta+1}{2n+\alpha+\beta+1} \, P^{(\alpha+1,\beta)}_n(t) - \frac{n+\beta}{2n+\alpha+\beta+1} \, P^{(\alpha+1,\beta)}_{n-1}(t).
+\end{equation}
+
+\section{A map transforming the triangle onto a square}
+
+Let $\stixsquare$ be the square $(-1,1) \times (-1,1)$.
+The map $\Phi \colon \rtriangle \to \stixsquare$ defined by
+%
+\begin{equation}\label{Phi}
+\Phi(x,y) := \left( 1-2x-2y, \frac{x-y}{x+y} \right)
+\end{equation}
+%
+is invertible and its inverse is $\Psi \colon \stixsquare \to \rtriangle$ defined by
+%
+\begin{equation}\label{Psi}
+\Psi(\eta,\zeta) := \left( \frac{1-\eta}{2} \frac{1-\zeta}{2}, \frac{1-\eta}{2} \frac{1+\zeta}{2} \right).
+\end{equation}
+%
+Their gradients are given by
+%
+\begin{equation*}
+D\Phi(x,y) = \begin{pmatrix} -2 & -2 \\ -\frac{2y}{(x+y)^2} & \frac{2x}{(x+y)^2} \end{pmatrix}
+\quad\text{and}\quad
+D\Psi(\eta,\zeta) = \begin{pmatrix} -\frac{1}{2} \frac{1-\zeta}{2} & -\frac{1}{2} \frac{1-\eta}{2} \\ -\frac{1}{2} \frac{1+\zeta}{2} & \frac{1}{2} \frac{1-\eta}{2} \end{pmatrix}.
+\end{equation*}
+%
+
+\section{Squared norm}
+
+Let $h^{\alpha,\beta,\gamma}_{n,k}$ be the squared $w_{\alpha,\beta,\gamma}$-weighted norm of the triangle polynomial $P^{\alpha,\beta,\gamma}_{n,k}$ of \eqref{trianglePolynomial}.
+Then using the change of variable $(x,y) = \Psi(\eta,\zeta)$, so that $d(x,y) = \lvert \det(D\Psi(\eta,\zeta)) \rvert \, d(\eta,\zeta) = \frac{1}{4} \frac{1-\eta}{2} \, d(\eta,\zeta)$,
+%
+\begin{equation*}
+\begin{split}
+h^{\alpha,\beta,\gamma}_{n,k} & := \left\langle P^{\alpha,\beta,\gamma}_{n-k}, P^{\alpha,\beta,\gamma}_{n-k} \right\rangle_{\alpha,\beta,\gamma}\\
+& = \int_\rtriangle \left[ (x+y)^k P^{(\alpha,\beta)}_k\mathopen{}\left( \frac{y-x}{x+y} \mathclose{}\right) P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(1-2x-2y) \right]^2 x^\alpha y^\beta (1-x-y)^\gamma \, d(x,y)\\
+& = 2^{-2k-2\alpha-2\beta-\gamma-3} \int_\stixsquare \left[ P^{(\alpha,\beta)}_k(\zeta) P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta) \right]^2\\& \qquad\qquad\qquad \times (1-\zeta)^\alpha (1+\zeta)^\beta (1-\eta)^{2k+\alpha+\beta+1} (1+\eta)^\gamma \, d(\eta,\zeta).
+\end{split}
+\end{equation*}
+%
+By Fubini's theorem and \eqref{JacobiOrthogonality}, this turns into
+%
+\begin{equation}\label{trianglePolynomialSquaredNorm}
+h^{\alpha,\beta,\gamma}_{n,k} = 2^{-2k-2\alpha-2\beta-\gamma-3} \, h^{(\alpha,\beta)}_k \, h^{(2k+\alpha+\beta+1,\gamma)}_{n-k}.
+\end{equation}
+%
+
+By \eqref{trianglePolynomialSquaredNorm}, the first triangle polynomial squared norm is $h^{\alpha,\beta,\gamma}_{0,0} = 2^{-2\alpha-2\beta-\gamma-3} h^{(\alpha,\beta)}_0 h^{(\alpha+\beta+1,\gamma)}_0$.
+By \eqref{JacobiSquaredNormFirst},
+%
+\begin{equation}\label{h00}
+h^{\alpha,\beta,\gamma}_{0,0}
+= \frac{\Gamma(\alpha+1) \Gamma(\beta+1) \Gamma(\gamma+1)}{\Gamma(\alpha+\beta+\gamma+3)}.
+\end{equation}
+%
+By \eqref{JacobiSquaredNormFirst} and \eqref{JacobiSquaredNormGeneral},
+%
+\begin{align}
+\label{h10}%
+h^{\alpha,\beta,\gamma}_{1,0} & = \frac{(\alpha+\beta+2)(\gamma+1)}{\alpha+\beta+\gamma+4} \, h^{\alpha,\beta,\gamma}_{0,0},\\
+\label{h11}%
+h^{\alpha,\beta,\gamma}_{1,1} & = \frac{(\alpha+\beta+2)(\alpha+1)(\beta+1)}{(\alpha+\beta+\gamma+4)(\alpha+\beta+3)} \, h^{\alpha,\beta,\gamma}_{0,0}.
+\end{align}
+%
+
+By \eqref{JacobiSquaredNormFirst} and \eqref{JacobiSquaredNormGeneral}, for $n \geq 2$,
+%
+\begin{equation}\label{hn0}
+h^{\alpha,\beta,\gamma}_{n,0} = \frac{2n+\alpha+\beta+\gamma}{2n+\alpha+\beta+\gamma+2} \frac{(n+\alpha+\beta+1)(n+\gamma)}{n \, (n+\alpha+\beta+1)} \, h^{\alpha,\beta,\gamma}_{n-1,0}.
+\end{equation}
+%
+
+By \eqref{JacobiSquaredNormFirst} and \eqref{JacobiSquaredNormGeneral}, for $n \geq 2$,
+%
+\begin{equation}\label{hn1}
+h^{\alpha,\beta,\gamma}_{n,1} = \frac{(\alpha+1)(\beta+1)}{\alpha+\beta+3} \frac{n \, (n+\alpha+\beta+2)}{(n+\gamma)(n+\alpha+\beta+\gamma+2)} \, h^{\alpha,\beta,\gamma}_{n,0}.
+\end{equation}
+%
+By \eqref{JacobiSquaredNormGeneral}, for $n \geq 3$ and $1 \leq k \leq n-2$,
+%
+\begin{equation}\label{hnkp1}
+h^{\alpha,\beta,\gamma}_{n,k+1} = \frac{2k+\alpha+\beta+1}{2k+\alpha+\beta+3} \frac{(k+\alpha+1)(k+\beta+1)}{(k+1)(k+\alpha+\beta+1)} \frac{(n-k)(n+k+\alpha+\beta+2)}{(n-k+\gamma)(n+k+\alpha+\beta+\gamma+2)} \, h^{\alpha,\beta,\gamma}_{n,k}.
+\end{equation}
+%
+By \eqref{JacobiSquaredNormFirst} and \eqref{JacobiSquaredNormGeneral}, for $n \geq 2$,
+%
+\begin{equation}\label{hnn}
+h^{\alpha,\beta,\gamma}_{n,n} = \frac{(2n+\alpha+\beta+1)(n+\alpha)(n+\beta)}{n\,(n+\alpha+\beta)(\gamma+1)(2n+\alpha+\beta+\gamma+1)} \, h^{\alpha,\beta,\gamma}_{n,n-1}.
+\end{equation}
+%
+
+With the above relations we can compute the squared norms $h^{\alpha,\beta,\gamma}_{n,k}$ using the scheme depicted in \autoref{fig:trianglePolynomialComputationGraph}.
+
+\begin{figure}
+%
+\begin{equation*}
+\xymatrix @-0.2pc {
+\ar@<2pt>[d]^{\eqref{h00}}\\
+h^{\alpha,\beta,\gamma}_{0,0} \ar@<2pt>[d]_{\eqref{h10}} \ar@<2pt>[rd]^{\eqref{h11}}\\
+h^{\alpha,\beta,\gamma}_{1,0} \ar@<2pt>[d]_{\eqref{hn0}} & h^{\alpha,\beta,\gamma}_{1,1}\\
+h^{\alpha,\beta,\gamma}_{2,0} \ar@<2pt>[d]_{\eqref{hn0}} \ar@<2pt>[r]^{\eqref{hn1}} & h^{\alpha,\beta,\gamma}_{2,1} \ar@<2pt>[r]^{\eqref{hnn}} & h^{\alpha,\beta,\gamma}_{2,2}\\
+h^{\alpha,\beta,\gamma}_{3,0} \ar@<2pt>[d]_{\eqref{hn0}} \ar@<2pt>[r]^{\eqref{hn1}} & h^{\alpha,\beta,\gamma}_{3,1} \ar@<2pt>[r]^{\eqref{hnkp1}} & h^{\alpha,\beta,\gamma}_{3,2} \ar@<2pt>[r]^{\eqref{hnn}} & h^{\alpha,\beta,\gamma}_{3,3}\\
+\vdots \ar@<2pt>[d]_{\eqref{hn0}}\\
+h^{\alpha,\beta,\gamma}_{n,0} \ar@<2pt>[r]^{\eqref{hn1}} & h^{\alpha,\beta,\gamma}_{n,1} \ar@<2pt>[r]^{\eqref{hnkp1}} \ar@<2pt>[r]^{\eqref{hnkp1}} & h^{\alpha,\beta,\gamma}_{n,2} \ar@<2pt>[r]^{\eqref{hnkp1}} & \cdots \ar@<2pt>[r]^{\eqref{hnkp1}} & h^{\alpha,\beta,\gamma}_{n,n-1} \ar@<2pt>[r]^{\eqref{hnn}} & h^{\alpha,\beta,\gamma}_{n,n}
+}
+\end{equation*}
+%
+\caption{Dependency graph for the computation of the $h^{\alpha,\beta,\gamma}_{n,k}$.}
+\label{fig:trianglePolynomialComputationGraph}
+\end{figure}
+
+\section{Three term recurrences}
+
+Let us note that
+%
+\begin{equation}\label{unexpandedTransformation}
+\left. x \, P^{\alpha,\beta,\gamma}_{n,n-k}(x,y) \right|_{(x,y) = \Psi(\eta,\zeta)}
+\stackrel{\eqref{trianglePolynomial},\eqref{Psi}}{=} \frac{1-\eta}{2} \frac{1-\zeta}{2} \left(\frac{1-\eta}{2}\right)^k P^{(\alpha,\beta)}_k(\zeta) \, P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta).
+\end{equation}
+%
+Using \eqref{JacobiTTR} we can expand
+%
+\begin{subequations}
+% Checked with Mathematica
+\begin{equation}\label{variantJacobiTTRFirst}
+\frac{1-\zeta}{2} \, P^{(\alpha,\beta)}_0(\zeta) = \frac{\alpha+1}{\alpha+\beta+2} \, P^{(\alpha,\beta)}_0(\zeta) - \frac{1}{\alpha+\beta+2} \, P^{(\alpha,\beta)}_1(\zeta),
+\end{equation}
+% Checked with Mathematica
+\begin{multline}\label{variantJacobiTTRGeneral}
+(\forall\,k\geq 1) \quad \frac{1-\zeta}{2} \, P^{(\alpha,\beta)}_k(\zeta)
+= -\frac{(k+\alpha)(k+\beta)}{(2k+\alpha+\beta)(2k+\alpha+\beta+1)} \, P^{(\alpha,\beta)}_{k-1}(\zeta)\\
++ \left( \frac{1}{2} - \frac{\beta^2-\alpha^2}{2(2k+\alpha+\beta)(2k+\alpha+\beta+2)} \right) P^{(\alpha,\beta)}_k(\zeta)\\
+- \frac{(k+1)(k+\alpha+\beta+1)}{(2k+\alpha+\beta+1)(2k+\alpha+\beta+2)} \, P^{(\alpha,\beta)}_{k+1}(\zeta).
+\end{multline}
+\end{subequations}
+%
+So, if $n \geq 2$ and $1 \leq k \leq n-1$,
+%
+\begin{multline*}
+\left. x \, P^{\alpha,\beta,\gamma}_{n,n-k}(x,y) \right|_{(x,y) = \Psi(\eta,\zeta)}
+\stackrel{\eqref{unexpandedTransformation},\eqref{variantJacobiTTRGeneral}}{=} \frac{1-\zeta}{2} P^{(\alpha,\beta)}_k(\zeta) \left(\frac{1-\eta}{2}\right)^{k+1} P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta)\\
+= -\frac{(k+\alpha)(k+\beta)}{(2k+\alpha+\beta)(2k+\alpha+\beta+1)} \, P^{(\alpha,\beta)}_{k-1}(\zeta) \left(\frac{1-\eta}{2}\right)^{k-1} \left(\frac{1-\eta}{2}\right)^2 P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta)\\
++ \left( \frac{1}{2} - \frac{\beta^2-\alpha^2}{2(2k+\alpha+\beta)(2k+\alpha+\beta+2)} \right) P^{(\alpha,\beta)}_k(\zeta) \left(\frac{1-\eta}{2}\right)^k \frac{1-\eta}{2} \, P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta)\\
+- \frac{(k+1)(k+\alpha+\beta+1)}{(2k+\alpha+\beta+1)(2k+\alpha+\beta+2)} \, P^{(\alpha,\beta)}_{k+1}(\zeta) \left(\frac{1-\eta}{2}\right)^{k+1} P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta).
+\end{multline*}
+%
+\textcolor{red}{\textbf{Expand one.}}
+\textcolor{red}{\textbf{Expand another.}}
+%
+\begin{multline*}
+P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(\eta) = EXPAND
+\end{multline*}
+%
+
+\noindent\rule{\linewidth}{2pt}
+
+Using polar coordinates $(r,\theta) = \left(\sqrt{x^2+y^2},\arctan(x,y)\right) \leftrightarrow (x,y) = \left(r\cos(\theta),r\sin(\theta)\right)$,
+%
+\begin{equation*}
+\begin{split}
+P^{\alpha,\beta,\gamma}_{n,k}(x^2,y^2)
+& \stackrel{\eqref{trianglePolynomial}}{=} r^{2k} P^{(\alpha,\beta)}_k(1-2\cos(\theta)^2) P^{(2k+\alpha+\beta+1,\gamma)}_{n-k}(1-2r^2)\\
+& \stackrel{\text{parity}}{=} (-1)^n r^{2k} P^{(\beta,\alpha)}_{\frac{2k}{2}}(2\cos(\theta)^2-1) P^{(\gamma,2k+\alpha+\beta+1)}_{n-k}(2r^2-1)\\
+& = c^{\alpha,\beta,\gamma}_{n,k} r^{2k} C^{(\alpha+\frac{1}{2},\beta+\frac{1}{2})}_{2k}(\cos(\theta)) P^{(\gamma,2k+\alpha+\beta+1)}_{n-k}(2r^2-1)\\
+& = c^{\alpha,\beta,\gamma}_{n,k} Y^{(2\beta+1,2\alpha+1;\textrm{even})}_{2k}(r\cos(\theta),r\sin(\theta)) P^{(\gamma,2k+\alpha+\beta+1)}_{n-k}(2r^2-1)\\
+& = c^{\alpha,\beta,\gamma}_{n,k} Z^{(\gamma,(2\beta+1,2\alpha+1);\textrm{even})}_{2k,n-k}(x,y).
+\end{split}
+\end{equation*}
+%
+
+Now, we know that
+%
+\begin{equation*}
+x Z^{(a,(g_1,g_2);\mathrm{even})}_{m,n}(x,y)
+\end{equation*}
+%
+can be expressed in terms of
+%
+\begin{equation*}
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m+1,n}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m+1,n-1}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m-1,n} \quad
+\quad \text{and} \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m-1,n+1}.
+\end{equation*}
+%
+Iterating this, we infer that
+%
+\begin{equation*}
+x^2 Z^{(a,(g_1,g_2);\mathrm{even})}_{m,n}(x,y)
+\end{equation*}
+%
+can be expressed in terms of
+%
+\begin{equation*}
+\begin{gathered}
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m+2,n}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m+2,n-1}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m+2,n-2},\\
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m,n+1}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m,n}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m,n-1},\\
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m-2,n+2}, \quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m-2,n+1} \quad\text{and}\quad
+Z^{(a,(g_1,g_2);\mathrm{even})}_{m-2,n}.
+\end{gathered}
+\end{equation*}
+%
+
+\noindent\rule{\linewidth}{2pt}
+
+
+
+\bibliographystyle{amsalpha}
+\bibliography{refs}
+
+\end{document}
